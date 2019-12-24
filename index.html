@@ -13,36 +13,22 @@
   <p id="losses-text"></p>
   <p id="Wrong-letters"></p>
   <script type="text/javascript">
-    //initializing variables
+  
     var wins = 0;
     var losses = 0;
     var wrong = "";
 
-   /* if (typeof(Storage) !== "undefined") {
-  // Store
-  localStorage.setItem("lastname", "joe");
-  // Retrieve
-  document.getElementById("result").innerHTML = localStorage.getItem("lastname");
-} else {
-  document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
-}*/
-
-
-    // var winsText = document.getElementById("wins-text");
-    //var lossesText = document.getElementById("losses-text");
     var Guesses = document.getElementById("Guesses-Remaining");
     var lossestxt = document.getElementById("losses-text");
     var winstxt = document.getElementById("wins-text");
-    // Create variables that hold references to the places in the HTML where we want to display things.
     var word = document.getElementById("HiddenWord");
     var wronglet = document.getElementById("Wrong-letters")
 
-    //creating list of words for the puzzle
+    
     var Wordoptions = ["elephant", "monkey", "zebra", "pig"];
 
-    // Randomly chooses an option from the Wordoptions array.
+   
     var Selectedword = Wordoptions[Math.floor(Math.random() * Wordoptions.length)];
-    console.log(Selectedword);
 
     var answerarr = [];
     for (var i = 0; i < Selectedword.length; i++) {
@@ -50,17 +36,35 @@
     }
 
     word.innerHTML = answerarr.join("");
-    var Guessesleft = 10;
+    var Guessesleft =  10;
     Guesses.textContent = "Guesses remaining :" + Guessesleft;
 
     wronglet.textContent = "Wrong letters: " + wrong;
     lossestxt.textContent = "Losses :" + losses;
     winstxt.textContent = "Wins :" + wins;
     
-    // This function is run whenever the user presses a key.
+   function Clearit(){
+     Guessesleft = 10;
+     Selectedword = Wordoptions[Math.floor(Math.random() * Wordoptions.length)];
+     answerarr = [];
+     for (var i = 0; i < Selectedword.length; i++) {
+      answerarr[i] = "_ ";
+    }
+     wrong = "";
+     word.innerHTML = answerarr.join("");
+     wronglet.textContent = "Wrong letters: " + wrong;
+     Guesses.textContent = "Guesses remaining :" + Guessesleft;
+
+   }
+
+  
+
+
+
+
     document.onkeyup = function (event) {
 
-      // Determines which key was pressed.
+      
       var userGuess = event.key.toLowerCase();
 
       if (Guessesleft > 0) {
@@ -71,10 +75,10 @@
             word.textContent = answerarr.join(" ");  
           }
           }
-          if (userGuess != Selectedword[i]){
+          if (userGuess !== Selectedword[i]){
             wrong = wrong + userGuess
             wronglet.textContent = "Wrong letters: " + wrong;
-            console.log(wrong)
+            
           }
         
         Guessesleft--;
@@ -83,20 +87,32 @@
         if (Guessesleft === 0) {
           losses++;
           lossestxt.textContent = "Losses :" + losses;
-          alert("Game OVER")
+          Clearit()
+          console.log(Guessesleft)
+          console.log(wrong)
+          console.log(answerarr)
+          console.log(Selectedword)
+        
+         
 
         }
-      }
-      if (answerarr.join("") === Selectedword) {
+        if (answerarr.join("") === Selectedword) {
           wins++;
           winstxt.textContent = "Wins :" + wins;
-          //alert("You Win!")
-          //location.reload();
-          //document.getElementById("Guesses-Remaining").reset(Guessesleft);
+          Clearit()
+          console.log(Guessesleft)
+          console.log(wrong)
+          console.log(answerarr)
+          console.log(Selectedword)
+          
+        
           
         }
+        
+      }
 
     }
+    
 
   </script>
 </body>
