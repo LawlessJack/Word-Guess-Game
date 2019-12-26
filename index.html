@@ -13,10 +13,10 @@
   <p id="losses-text"></p>
   <p id="Wrong-letters"></p>
   <script type="text/javascript">
-  
+
     var wins = 0;
     var losses = 0;
-    var wrong = "";
+    var wrong = [];
 
     var Guesses = document.getElementById("Guesses-Remaining");
     var lossestxt = document.getElementById("losses-text");
@@ -24,10 +24,10 @@
     var word = document.getElementById("HiddenWord");
     var wronglet = document.getElementById("Wrong-letters")
 
-    
-    var Wordoptions = ["elephant", "monkey", "zebra", "pig"];
 
-   
+    var Wordoptions = ["zebra"]// "elephant", "monkey", , "pig", "giraffe", "snake", "lemur", "rhinocerous", "panda"];
+
+
     var Selectedword = Wordoptions[Math.floor(Math.random() * Wordoptions.length)];
 
     var answerarr = [];
@@ -36,83 +36,103 @@
     }
 
     word.innerHTML = answerarr.join("");
-    var Guessesleft =  10;
+    var Guessesleft = 10;
     Guesses.textContent = "Guesses remaining :" + Guessesleft;
 
     wronglet.textContent = "Wrong letters: " + wrong;
     lossestxt.textContent = "Losses :" + losses;
     winstxt.textContent = "Wins :" + wins;
-    
-   function Clearit(){
-     Guessesleft = 10;
-     Selectedword = Wordoptions[Math.floor(Math.random() * Wordoptions.length)];
-     answerarr = [];
-     for (var i = 0; i < Selectedword.length; i++) {
-      answerarr[i] = "_ ";
+
+    function Clearit() { //resets everything except wins and losses
+      Guessesleft = 10;
+      Selectedword = Wordoptions[Math.floor(Math.random() * Wordoptions.length)];
+      answerarr = [];
+      for (var i = 0; i < Selectedword.length; i++) {
+        answerarr[i] = "_ ";
+      }
+      wrong = [];
+      word.innerHTML = answerarr.join("");
+      wronglet.textContent = "Wrong letters: " + wrong;
+      Guesses.textContent = "Guesses remaining :" + Guessesleft;
+
     }
-     wrong = "";
-     word.innerHTML = answerarr.join("");
-     wronglet.textContent = "Wrong letters: " + wrong;
-     Guesses.textContent = "Guesses remaining :" + Guessesleft;
 
-   }
+    var farr = [];
+    for (i = 0; i < Selectedword.length; i++) {
+      farr.push(false)
 
-  
-
-
-
+    }
 
     document.onkeyup = function (event) {
 
-      
+
       var userGuess = event.key.toLowerCase();
 
       if (Guessesleft > 0) {
+        var found = false;
+        var wrongfound = false;
 
-        for (i = 0; i < Selectedword.length; i++) {
+
+        for (i = 0; i < Selectedword.length; i++) {   //iterates throught the word to check each letter if it's the same as the guess
           if (userGuess === Selectedword[i]) {
             answerarr[i] = userGuess;
-            word.textContent = answerarr.join(" ");  
+            word.textContent = answerarr.join(" ");
+            console.log("length = " + Selectedword.length)
+            console.log("userGuess = " + userGuess)
+            console.log("i = " + i)
+            farr[i] = true
+            console.log(farr)
+            console.log(wrong)
+            found = true;
           }
-          }
-          if (userGuess !== Selectedword[i]){
-            wrong = wrong + userGuess
-            wronglet.textContent = "Wrong letters: " + wrong;
+
+          else if (found === false) {
+            console.log("wrong= " + wrong)
+            console.log(userGuess)
+            console.log("i = " + i)
+            if (wrongfound === false && farr[i] === false) {
+
+              console.log("wrong= " + wrong)
+              console.log("farr =" + farr[i])
+              wrongfound = true;
+              wrong.push(userGuess)
+              wronglet.textContent = "Wrong letters: " + wrong.join("");
+            }
+
             
+
           }
-        
-        Guessesleft--;
-        Guesses.textContent = "Guesses remaining :" + Guessesleft;
-
-        if (Guessesleft === 0) {
-          losses++;
-          lossestxt.textContent = "Losses :" + losses;
-          Clearit()
-          console.log(Guessesleft)
-          console.log(wrong)
-          console.log(answerarr)
-          console.log(Selectedword)
-        
-         
 
         }
-        if (answerarr.join("") === Selectedword) {
-          wins++;
-          winstxt.textContent = "Wins :" + wins;
-          Clearit()
-          console.log(Guessesleft)
-          console.log(wrong)
-          console.log(answerarr)
-          console.log(Selectedword)
-          
-        
-          
-        }
-        
+
+
+
+      }
+
+
+
+      Guessesleft--;
+      Guesses.textContent = "Guesses remaining :" + Guessesleft;
+
+      //win condition needs to be placed before losses so a win is counted if you get it right on the last try
+      if (answerarr.join("") === Selectedword) {
+        wins++;
+        winstxt.textContent = "Wins :" + wins;
+        Clearit()
+
+      }
+
+
+      if (Guessesleft === 0) {
+        losses++;
+        lossestxt.textContent = "Losses :" + losses;
+        Clearit()
+
       }
 
     }
-    
+
+    console.log(Selectedword)
 
   </script>
 </body>
