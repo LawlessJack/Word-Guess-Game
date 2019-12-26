@@ -3,6 +3,9 @@
 
 <head>
   <title>Word Guess Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 
 <body>
@@ -36,7 +39,7 @@
     }
 
     word.innerHTML = answerarr.join("");
-    var Guessesleft = 10;
+    var Guessesleft = 6;
     Guesses.textContent = "Guesses remaining :" + Guessesleft;
 
     wronglet.textContent = "Wrong letters: " + wrong;
@@ -44,7 +47,7 @@
     winstxt.textContent = "Wins :" + wins;
 
     function Clearit() { //resets everything except wins and losses
-      Guessesleft = 10;
+      Guessesleft = 6;
       Selectedword = Wordoptions[Math.floor(Math.random() * Wordoptions.length)];
       answerarr = [];
       for (var i = 0; i < Selectedword.length; i++) {
@@ -54,20 +57,13 @@
       word.innerHTML = answerarr.join("");
       wronglet.textContent = "Wrong letters: " + wrong;
       Guesses.textContent = "Guesses remaining :" + Guessesleft;
-
     }
-
-
-
     document.onkeyup = function (event) {
       var anyFoundFlag = false;
       var anyFoundArray = [];
       for (i = 0; i < Selectedword.length; i++) {
         anyFoundArray.push(false)
-
       }
-
-
       var userGuess = event.key.toLowerCase();
 
       if (Guessesleft > 0) {
@@ -78,13 +74,6 @@
           if (userGuess === Selectedword[i]) {
             anyFoundArray[i] = true;
             anyFoundFlag = true;
-            console.log("length = " + Selectedword.length)
-            console.log("userGuess = " + userGuess)
-            console.log("i = " + i)
-            
-            console.log("anyfound =" + anyFoundArray[i])
-            console.log("anyFoundFlag= " + anyFoundFlag)
-            
           }
         }
         //right or wrong setting
@@ -93,56 +82,29 @@
             if (anyFoundArray[i] === true) {
               answerarr[i] = userGuess;
               word.textContent = answerarr.join(" ");
-              console.log("length = " + Selectedword.length)
-              console.log("userGuess = " + userGuess)
-              console.log("i = " + i)
+
             }
           }
         }
         else {
+          Guessesleft--;
+          Guesses.textContent = "Guesses remaining :" + Guessesleft;
           wrong.push(userGuess)
           wronglet.textContent = "Wrong letters: " + wrong.join("");
-          console.log("wrong= " + wrong)
-          
         }
-
-        
-
-
-
-
       }
-      Guessesleft--;
-    Guesses.textContent = "Guesses remaining :" + Guessesleft;
-
-    //win condition needs to be placed before losses so a win is counted if you get it right on the last try
-    if (answerarr.join("") === Selectedword) {
-      wins++;
-      winstxt.textContent = "Wins :" + wins;
-      Clearit()
-
+      //win condition needs to be placed before losses so a win is counted if you get it right on the last try
+      if (answerarr.join("") === Selectedword) {
+        wins++;
+        winstxt.textContent = "Wins :" + wins;
+        Clearit()
+      }
+      if (Guessesleft === 0) {
+        losses++;
+        lossestxt.textContent = "Losses :" + losses;
+        Clearit()
+      }
     }
-
-
-    if (Guessesleft === 0) {
-      losses++;
-      lossestxt.textContent = "Losses :" + losses;
-      Clearit()
-
-    }
-
-
-
-    }
-
-
-
-    
-    
-
-    console.log(Selectedword)
-
   </script>
 </body>
-
 </html>
